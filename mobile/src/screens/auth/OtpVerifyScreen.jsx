@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { KeyRound, ArrowLeft, CheckCircle2, Loader2, RefreshCw } from 'lucide-react';
+import { KeyRound, ArrowLeft, CheckCircle2, Loader2, RefreshCw, AlertCircle, TerminalSquare } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { motion } from 'framer-motion';
