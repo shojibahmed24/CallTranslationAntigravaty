@@ -1,53 +1,18 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Phone, MessageSquare, Search, User, AlertTriangle } from 'lucide-react';
-import { api } from '../services/api';
+﻿const fs = require('fs');
+const file = 'mobile/src/components/DialpadBottomSheet.jsx';
+let content = fs.readFileSync(file, 'utf8');
 
-export default function DialpadBottomSheet({ isOpen, onClose, actionType, onProceed }) {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [foundUser, setFoundUser] = useState(null);
+if (!content.includes('framer-motion')) {
+  content = content.replace("import React, { useState } from 'react';", "import React, { useState } from 'react';\nimport { motion, AnimatePresence } from 'framer-motion';");
+}
+if (!content.includes('AlertTriangle')) {
+  content = content.replace("User } from 'lucide-react'", "User, AlertTriangle } from 'lucide-react'");
+}
 
-  
+const funcStart = content.indexOf('export default function DialpadBottomSheet');
+const returnStart = content.indexOf('return (', funcStart);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!phoneNumber.trim()) return;
-    
-    setLoading(true);
-    setError('');
-    setFoundUser(null);
-    
-    try {
-      // Add '+' if missing (assuming international format) or search as is
-      const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`;
-      
-      const res = await api.request('/chat/sync-contacts', {
-        method: 'POST',
-        body: JSON.stringify({ phoneNumbers: [formattedPhone, phoneNumber] }) // Try both formats
-      });
-
-      if (res.contacts && res.contacts.length > 0) {
-        setFoundUser(res.contacts[0]);
-      } else {
-        setError('No UNICOM user found with this number.');
-      }
-    } catch (err) {
-      setError('Failed to search user.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAction = () => {
-    if (foundUser) {
-      onProceed(foundUser);
-      onClose();
-    }
-  };
-
-  return (
+const newReturn = `return (
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end">
@@ -74,9 +39,9 @@ export default function DialpadBottomSheet({ isOpen, onClose, actionType, onProc
             
             <div className="p-6">
               <div className="flex justify-between items-center mb-7">
-                <h3 className={`text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r drop-shadow-sm ${
+                <h3 className={\`text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r drop-shadow-sm \${
                   actionType === 'chat' ? 'from-blue-400 to-teal-400' : 'from-teal-400 to-emerald-400'
-                }`}>
+                }\`}>
                   {actionType === 'chat' ? 'New Chat' : 'Make a Call'}
                 </h3>
                 <button 
@@ -139,16 +104,16 @@ export default function DialpadBottomSheet({ isOpen, onClose, actionType, onProc
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ type: 'spring', damping: 20, stiffness: 250 }}
-                    className={`bg-white/5 border rounded-3xl p-5 flex items-center justify-between shadow-xl backdrop-blur-md ${
+                    className={\`bg-white/5 border rounded-3xl p-5 flex items-center justify-between shadow-xl backdrop-blur-md \${
                       actionType === 'chat' ? 'border-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.15)]' : 'border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.15)]'
-                    }`}
+                    }\`}
                   >
                     <div className="flex items-center gap-4">
-                      <div className={`w-14 h-14 bg-black/40 rounded-full overflow-hidden border-2 flex items-center justify-center ${
+                      <div className={\`w-14 h-14 bg-black/40 rounded-full overflow-hidden border-2 flex items-center justify-center \${
                         actionType === 'chat' ? 'border-blue-400' : 'border-emerald-400'
-                      }`}>
+                      }\`}>
                         {foundUser.avatar ? (
-                          <img src={`http://localhost:5000${foundUser.avatar}`} className="w-full h-full object-cover" alt={foundUser.name} />
+                          <img src={\`http://localhost:5000\${foundUser.avatar}\`} className="w-full h-full object-cover" alt={foundUser.name} />
                         ) : (
                           <User className="w-6 h-6 text-slate-400" />
                         )}
@@ -161,14 +126,14 @@ export default function DialpadBottomSheet({ isOpen, onClose, actionType, onProc
                     
                     <button
                       onClick={handleAction}
-                      className={`p-4 rounded-full text-white shadow-lg transition-all active:scale-90 group ${
+                      className={\`p-4 rounded-full text-white shadow-lg transition-all active:scale-90 group \${
                         actionType === 'chat' 
                           ? 'bg-gradient-to-r from-blue-600 to-blue-500 shadow-[0_4px_15px_rgba(59,130,246,0.4)] hover:shadow-[0_4px_25px_rgba(59,130,246,0.6)]' 
                           : 'bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_4px_15px_rgba(16,185,129,0.4)] hover:shadow-[0_4px_25px_rgba(16,185,129,0.6)]'
-                      }`}
+                      }\`}
                     >
                       {/* Idle pulsing glow */}
-                      <div className={`absolute inset-0 rounded-full animate-ping opacity-20 ${actionType === 'chat' ? 'bg-blue-400' : 'bg-emerald-400'}`} style={{ animationDuration: '3s' }} />
+                      <div className={\`absolute inset-0 rounded-full animate-ping opacity-20 \${actionType === 'chat' ? 'bg-blue-400' : 'bg-emerald-400'}\`} style={{ animationDuration: '3s' }} />
                       
                       <div className="relative z-10">
                         {actionType === 'chat' ? <MessageSquare className="w-6 h-6 drop-shadow-sm" /> : <Phone className="w-6 h-6 drop-shadow-sm" />}
@@ -183,5 +148,12 @@ export default function DialpadBottomSheet({ isOpen, onClose, actionType, onProc
       )}
     </AnimatePresence>
   );
+`;
 
-}
+content = content.substring(0, returnStart) + newReturn + '\n}';
+
+// Also remove `if (!isOpen) return null;` since we use AnimatePresence wrapping the whole thing now.
+content = content.replace('if (!isOpen) return null;', '');
+
+fs.writeFileSync(file, content);
+console.log('Replaced return block in DialpadBottomSheet');
