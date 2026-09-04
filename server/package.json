@@ -12,6 +12,7 @@
     "@deepgram/sdk": "^5.8.0",
     "@google/generative-ai": "^0.24.1",
     "@livekit/rtc-node": "^0.13.34",
+    "@parse/node-apn": "^8.1.0",
     "@sentry/node": "^10.73.0",
     "@supabase/supabase-js": "^2.112.3",
     "axios": "^1.19.0",

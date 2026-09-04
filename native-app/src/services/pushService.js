@@ -3,13 +3,12 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import { api } from './api';
 import { displayIncomingCall } from './CallKeepService';
+import VoipPushNotification from 'react-native-voip-push-notification';
 
 Notifications.setNotificationHandler({
   handleNotification: async (notification) => {
     const data = notification.request.content.data;
-    // If app is foregrounded and receives a call push, we might rely on Socket.io.
-    // But if we want it to ring natively anyway:
-    if (data && data.type === 'incoming_call') {
+    if (data && data.type === 'incoming_call' && Platform.OS !== 'ios') {
       displayIncomingCall(data.callId, data.callerName || 'Unknown', data.callerName || 'Caller');
     }
     return {
@@ -22,6 +21,7 @@ Notifications.setNotificationHandler({
 
 export const registerForPushNotificationsAsync = async () => {
   let token;
+  let voipToken;
 
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('default', {
@@ -29,6 +29,25 @@ export const registerForPushNotificationsAsync = async () => {
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: '#FF231F7C',
+    });
+  }
+
+  // Register for iOS VoIP Push (PushKit)
+  if (Platform.OS === 'ios' && !Device.isSimulator) {
+    VoipPushNotification.requestPermissions();
+    VoipPushNotification.addEventListener('register', (token) => {
+      console.log('VoIP Push Token:', token);
+      voipToken = token;
+      api.request('/users/push-token', { method: 'POST', body: JSON.stringify({ token: voipToken, isVoip: true }) });
+    });
+
+    VoipPushNotification.addEventListener('notification', (notification) => {
+      // Apple requires us to immediately report the call to CallKit
+      const { callId, callerName } = notification;
+      displayIncomingCall(callId, callerName || 'Unknown', callerName || 'Caller');
+      
+      // Tell APNs we processed it
+      VoipPushNotification.onVoipNotificationCompleted(notification.uuid);
     });
   }
 
@@ -50,7 +69,7 @@ export const registerForPushNotificationsAsync = async () => {
       })).data;
       console.log('Expo Push Token:', token);
       
-      await api.request('/users/push-token', { method: 'POST', body: JSON.stringify({ token }) });
+      await api.request('/users/push-token', { method: 'POST', body: JSON.stringify({ token, isVoip: false }) });
     } catch (e) {
       console.error('Error fetching Expo Push Token:', e);
     }
