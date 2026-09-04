@@ -1,0 +1,25 @@
+{
+  "name": "unicom-workspace",
+  "version": "1.0.0",
+  "description": "UNICOM (Universal Communication) - WhatsApp-style Messenger & Real-time AI Simultaneous Voice Translation System",
+  "scripts": {
+    "server": "npm.cmd --prefix server start",
+    "mobile": "npm.cmd --prefix mobile run dev",
+    "admin": "npm.cmd --prefix admin run dev"
+  },
+  "keywords": [
+    "real-time-translation",
+    "voice-call",
+    "webrtc",
+    "socket.io",
+    "bengali-english-translation",
+    "crypto-usdt-payments",
+    "whatsapp-clone"
+  ],
+  "author": "UNICOM Team",
+  "license": "MIT",
+  "dependencies": {
+    "jimp": "^0.16.13",
+    "pg": "^8.23.0"
+  }
+}

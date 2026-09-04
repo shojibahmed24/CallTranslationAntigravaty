@@ -1,0 +1,371 @@
+{
+  "users": [
+    {
+      "id": "usr_dev_001",
+      "phone": "+8801700000001",
+      "name": "Developer Account",
+      "language": "bn",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=faces",
+      "about": "UNICOM Lead Developer / Test Master Account",
+      "plan": "pro",
+      "storageUsedBytes": 125829120,
+      "translatedMinutesUsedToday": 0,
+      "translatedMinutesUsedMonth": 12,
+      "lastActiveDeviceId": "dev_session_primary",
+      "onlineStatus": "online",
+      "lastSeen": "2026-08-21T07:09:11.464Z",
+      "privacy": {
+        "lastSeen": "everyone",
+        "profilePhoto": "everyone",
+        "readReceipts": true,
+        "allowUnknownCalls": false
+      },
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "usr_rahim_002",
+      "phone": "+8801811223344",
+      "name": "Rahim Ahmed (Freelancer)",
+      "language": "bn",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces",
+      "about": "Full-stack Web & Mobile Developer | Available for projects",
+      "plan": "free",
+      "storageUsedBytes": 471859200,
+      "translatedMinutesUsedToday": 3,
+      "translatedMinutesUsedMonth": 46,
+      "lastActiveDeviceId": "mobile_primary_session_mobile_primary_session_mobile_primary_session_mobile_primary_session_y7fjok",
+      "onlineStatus": "offline",
+      "lastSeen": "2026-08-21T07:12:38.563Z",
+      "privacy": {
+        "lastSeen": "everyone",
+        "profilePhoto": "everyone",
+        "readReceipts": true,
+        "allowUnknownCalls": true
+      },
+      "createdAt": "2026-01-10T10:00:00.000Z"
+    },
+    {
+      "id": "usr_sarah_003",
+      "phone": "+14155552671",
+      "name": "Sarah Jenkins (Client US)",
+      "language": "en",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=faces",
+      "about": "Product Lead at Apex Labs San Francisco. Looking for talented devs.",
+      "plan": "pro",
+      "storageUsedBytes": 2202009600,
+      "translatedMinutesUsedToday": 1,
+      "translatedMinutesUsedMonth": 88,
+      "lastActiveDeviceId": "sess_sarah_1",
+      "onlineStatus": "online",
+      "lastSeen": "2026-08-21T07:09:11.466Z",
+      "privacy": {
+        "lastSeen": "everyone",
+        "profilePhoto": "everyone",
+        "readReceipts": true,
+        "allowUnknownCalls": true
+      },
+      "createdAt": "2026-01-12T14:00:00.000Z"
+    },
+    {
+      "id": "usr_rahul_004",
+      "phone": "+919876543210",
+      "name": "Rahul Sharma (Client IN)",
+      "language": "hi",
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces",
+      "about": "Founder & UI/UX Director, Mumbai. Scaling global fintech products.",
+      "plan": "pro",
+      "storageUsedBytes": 891289600,
+      "translatedMinutesUsedToday": 0,
+      "translatedMinutesUsedMonth": 60,
+      "lastActiveDeviceId": "sess_rahul_1",
+      "onlineStatus": "offline",
+      "lastSeen": "2026-08-21T06:09:11.466Z",
+      "privacy": {
+        "lastSeen": "contacts",
+        "profilePhoto": "everyone",
+        "readReceipts": true,
+        "allowUnknownCalls": true
+      },
+      "createdAt": "2026-02-01T08:30:00.000Z"
+    },
+    {
+      "id": "usr_tariq_005",
+      "phone": "+971501234567",
+      "name": "Tariq Al-Mansoor (Client UAE)",
+      "language": "ar",
+      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=faces",
+      "about": "E-commerce Business Manager, Dubai. Expanding Middle East logistics.",
+      "plan": "unlimited",
+      "storageUsedBytes": 4404019200,
+      "translatedMinutesUsedToday": 0,
+      "translatedMinutesUsedMonth": 120,
+      "lastActiveDeviceId": "sess_tariq_1",
+      "onlineStatus": "online",
+      "lastSeen": "2026-08-21T07:09:11.466Z",
+      "privacy": {
+        "lastSeen": "everyone",
+        "profilePhoto": "everyone",
+        "readReceipts": true,
+        "allowUnknownCalls": true
+      },
+      "createdAt": "2026-02-05T12:00:00.000Z"
+    }
+  ],
+  "contacts": [
+    {
+      "id": "cnt_1",
+      "userId": "usr_rahim_002",
+      "contactUserId": "usr_sarah_003",
+      "status": "accepted",
+      "alias": "Sarah (US Client)",
+      "pinned": true
+    },
+    {
+      "id": "cnt_2",
+      "userId": "usr_sarah_003",
+      "contactUserId": "usr_rahim_002",
+      "status": "accepted",
+      "alias": "Rahim (Lead Dev)",
+      "pinned": true
+    },
+    {
+      "id": "cnt_3",
+      "userId": "usr_rahim_002",
+      "contactUserId": "usr_rahul_004",
+      "status": "accepted",
+      "alias": "Rahul (UI/UX Mumbai)",
+      "pinned": false
+    },
+    {
+      "id": "cnt_4",
+      "userId": "usr_rahul_004",
+      "contactUserId": "usr_rahim_002",
+      "status": "accepted",
+      "alias": "Rahim Ahmed",
+      "pinned": false
+    },
+    {
+      "id": "cnt_5",
+      "userId": "usr_rahim_002",
+      "contactUserId": "usr_tariq_005",
+      "status": "accepted",
+      "alias": "Tariq (Dubai Logistics)",
+      "pinned": false
+    },
+    {
+      "id": "cnt_6",
+      "userId": "usr_tariq_005",
+      "contactUserId": "usr_rahim_002",
+      "status": "accepted",
+      "alias": "Rahim (Developer)",
+      "pinned": false
+    },
+    {
+      "id": "cnt_7",
+      "userId": "usr_dev_001",
+      "contactUserId": "usr_rahim_002",
+      "status": "accepted",
+      "alias": "Rahim Ahmed",
+      "pinned": false
+    },
+    {
+      "id": "cnt_8",
+      "userId": "usr_dev_001",
+      "contactUserId": "usr_sarah_003",
+      "status": "accepted",
+      "alias": "Sarah Jenkins",
+      "pinned": false
+    }
+  ],
+  "contactRequests": [],
+  "blockedUsers": [],
+  "messages": [
+    {
+      "id": "msg_101",
+      "senderId": "usr_sarah_003",
+      "receiverId": "usr_rahim_002",
+      "text": "Hi Rahim! I reviewed the latest UI updates you delivered. Everything looks great, but let's do a voice call to sync on the payment gateway integration.",
+      "mediaType": "text",
+      "fileUrl": null,
+      "fileName": null,
+      "fileSize": null,
+      "status": "read",
+      "reactions": [
+        {
+          "emoji": "👍",
+          "userId": "usr_rahim_002"
+        }
+      ],
+      "createdAt": "2026-08-21T04:09:11.466Z"
+    },
+    {
+      "id": "msg_102",
+      "senderId": "usr_rahim_002",
+      "receiverId": "usr_sarah_003",
+      "text": "ধন্যবাদ সারা! আমি পেমেন্ট গেটওয়ের আর্কিটেকচার ডকুমেন্ট রেডি করেছি। আমি আপনাকে ফাইলটা পাঠাচ্ছি।",
+      "mediaType": "text",
+      "fileUrl": null,
+      "fileName": null,
+      "fileSize": null,
+      "status": "read",
+      "reactions": [],
+      "createdAt": "2026-08-21T04:39:11.466Z"
+    },
+    {
+      "id": "msg_103",
+      "senderId": "usr_rahim_002",
+      "receiverId": "usr_sarah_003",
+      "text": "Payment_Integration_Architecture_v2.pdf",
+      "mediaType": "document",
+      "fileUrl": "/uploads/sample_doc.pdf",
+      "fileName": "Payment_Integration_Architecture_v2.pdf",
+      "fileSize": 1450000,
+      "status": "read",
+      "reactions": [
+        {
+          "emoji": "❤️",
+          "userId": "usr_sarah_003"
+        }
+      ],
+      "createdAt": "2026-08-21T04:45:11.466Z"
+    },
+    {
+      "id": "msg_104",
+      "senderId": "usr_sarah_003",
+      "receiverId": "usr_rahim_002",
+      "text": "Awesome! I'll call you through UNICOM right now so we can speak naturally with live interpretation.",
+      "mediaType": "text",
+      "fileUrl": null,
+      "fileName": null,
+      "fileSize": null,
+      "status": "read",
+      "reactions": [
+        {
+          "emoji": "🚀",
+          "userId": "usr_rahim_002"
+        }
+      ],
+      "createdAt": "2026-08-21T04:57:11.466Z"
+    }
+  ],
+  "calls": [
+    {
+      "id": "call_901",
+      "callerId": "usr_sarah_003",
+      "receiverId": "usr_rahim_002",
+      "callerLang": "en",
+      "receiverLang": "bn",
+      "isTranslated": true,
+      "durationSeconds": 240,
+      "translationMinutesCharged": 4,
+      "status": "completed",
+      "latencyMs": 180,
+      "createdAt": "2026-08-21T05:09:11.466Z"
+    },
+    {
+      "id": "call_9a4ecdeb",
+      "callerId": "usr_rahim_002",
+      "receiverId": "usr_sarah_003",
+      "callerLang": "bn",
+      "receiverLang": "en",
+      "isTranslated": true,
+      "durationSeconds": 3,
+      "translationMinutesCharged": 1,
+      "status": "completed",
+      "createdAt": "2026-08-21T07:12:26.282Z"
+    }
+  ],
+  "payments": [
+    {
+      "id": "pay_usdt_501",
+      "userId": "usr_rahim_002",
+      "userName": "Rahim Ahmed",
+      "userPhone": "+8801811223344",
+      "planId": "pro",
+      "planName": "Pro Freelancer ($9.99/mo)",
+      "amountUSD": 9.99,
+      "amountUSDT": 9.99,
+      "network": "TRC-20",
+      "walletAddress": "TK7R9xPnQ8wZyU2vAmK34sLmN6pQrB91vD",
+      "txHash": "e4d8a2c1b9f64e0a7c3d2b1f8e9a0c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b",
+      "status": "pending",
+      "submittedAt": "2026-08-21T03:09:11.466Z",
+      "reviewedAt": null,
+      "reviewedBy": null,
+      "rejectionReason": null
+    }
+  ],
+  "supportTickets": [
+    {
+      "id": "tkt_701",
+      "userId": "usr_rahim_002",
+      "userName": "Rahim Ahmed",
+      "userPhone": "+8801811223344",
+      "category": "payment",
+      "subject": "Submitted USDT TRC-20 payment for Pro upgrade",
+      "status": "open",
+      "priority": "high",
+      "messages": [
+        {
+          "sender": "user",
+          "senderName": "Rahim Ahmed",
+          "text": "Hello Admin, I have sent 9.99 USDT (TRC-20) and submitted TxHash. Please verify and upgrade my plan to Pro so I can continue 300 minutes calls with US clients.",
+          "createdAt": "2026-08-21T03:21:11.466Z"
+        }
+      ],
+      "createdAt": "2026-08-21T03:21:11.466Z",
+      "updatedAt": "2026-08-21T03:21:11.466Z"
+    }
+  ],
+  "settings": {
+    "usdtWalletAddress": "TK7R9xPnQ8wZyU2vAmK34sLmN6pQrB91vD",
+    "usdtNetwork": "TRC-20 (Tron Network)",
+    "businessName": "UNICOM Global Communications Ltd.",
+    "supportEmail": "support@unicom.global",
+    "proPlanPriceUSD": 9.99,
+    "unlimitedPlanPriceUSD": 19.99,
+    "freeCallMinutesDaily": 5,
+    "proCallMinutesMonthly": 300,
+    "unlimitedCallMinutesMonthly": 500,
+    "freeStorageGB": 5,
+    "proStorageGB": 50,
+    "unlimitedStorageGB": 100,
+    "twoFactorEnabled": true,
+    "maintenanceMode": false
+  },
+  "auditLogs": [
+    {
+      "id": "audit_01",
+      "adminEmail": "admin@unicom.global",
+      "action": "INITIAL_SYSTEM_SETUP",
+      "details": "System initialized with TRC-20 USDT Wallet and 3 Subscription Tiers",
+      "timestamp": "2026-01-01T00:00:00.000Z",
+      "ip": "127.0.0.1"
+    }
+  ],
+  "telemetry": [
+    {
+      "id": "tel_ed9583a2",
+      "timestamp": "2026-08-21T07:12:29.474Z",
+      "callId": "call_9a4ecdeb",
+      "pair": "bn-en",
+      "durationSeconds": 3,
+      "avgLatencyMs": 120,
+      "packetLossPercent": 0.1,
+      "bargeInEvents": 0,
+      "success": true,
+      "failureReason": null
+    },
+    {
+      "id": "tel_1",
+      "timestamp": "2026-08-21T05:09:11.466Z",
+      "callId": "call_901",
+      "pair": "bn-en",
+      "durationSeconds": 240,
+      "avgLatencyMs": 180,
+      "packetLossPercent": 0.2,
+      "bargeInEvents": 3,
+      "success": true
+    }
+  ]
+}

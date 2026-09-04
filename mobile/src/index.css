@@ -1,0 +1,6 @@
+
+/* Hide Firebase reCAPTCHA badge since we added the required terms text manually */
+.grecaptcha-badge {
+  visibility: hidden !important;
+}
+

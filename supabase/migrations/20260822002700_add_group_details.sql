@@ -1,0 +1,2 @@
+ALTER TABLE public.chats ADD COLUMN IF NOT EXISTS name TEXT;
+ALTER TABLE public.chats ADD COLUMN IF NOT EXISTS avatar_url TEXT;
