@@ -1,4 +1,4 @@
-const { sendPushNotification } = require('./pushController');
+import { sendPushNotification } from './pushController.js';
 import supabase from '../database/supabaseClient.js';
 
 export const getConversations = async (req, res) => {

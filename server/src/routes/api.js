@@ -51,8 +51,8 @@ router.delete('/users/block/:blockedId', requireAuth, authController.unblockUser
 router.get('/users/blocked', requireAuth, authController.getBlockedUsers);
 
 // --- PUSH NOTIFICATIONS ---
-router.get('/push/public-key', pushController.getPublicKey);
-router.post('/push/subscribe', requireAuth, pushController.saveSubscription);
+// router.get('/push/public-key', pushController.getPublicKey);
+// router.post('/push/subscribe', requireAuth, pushController.saveSubscription);
 
 // --- MESSAGING & CHATS ---
 router.get('/chat/conversations', requireAuth, chatController.getConversations);

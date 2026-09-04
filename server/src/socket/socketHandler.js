@@ -338,8 +338,6 @@ export const setupSocketHandlers = (io) => {
         } catch (e) {
           console.error('Call Summary Error:', e);
         }
-      });
-      }
     });
 
     // Disconnect handler

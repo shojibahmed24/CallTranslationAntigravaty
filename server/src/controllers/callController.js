@@ -1,4 +1,4 @@
-const { sendPushNotification } = require('./pushController');
+import { sendPushNotification } from './pushController.js';
 import { callStartTimes } from '../socket/socketHandler.js';
 import { v4 as uuidv4 } from 'uuid';
 import supabase from '../database/supabaseClient.js';

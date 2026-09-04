@@ -1,5 +1,5 @@
-﻿const { Expo } = require('expo-server-sdk');
-const apn = require('@parse/node-apn');
+﻿import { Expo } from 'expo-server-sdk';
+import apn from '@parse/node-apn';
 let expo = new Expo();
 
 // You will need an APNs Auth Key (.p8 file) from the Apple Developer Portal
@@ -53,6 +53,6 @@ const sendPushNotification = async (pushToken, title, body, data, voipToken = nu
   }
 };
 
-module.exports = {
+export {
   sendPushNotification
 };
