@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { User, Languages, Check, ArrowRight, Camera } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { User, Languages, Check, ArrowRight, Camera, Loader2, Upload } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { api } from '../../services/api';
