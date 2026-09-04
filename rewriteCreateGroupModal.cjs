@@ -1,70 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Users, Search, Check, Loader2 } from 'lucide-react';
-import { api } from '../services/api';
-import { useTheme } from '../context/ThemeContext';
+﻿const fs = require('fs');
+const file = 'mobile/src/components/CreateGroupModal.jsx';
+let content = fs.readFileSync(file, 'utf8');
 
-export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
-  const { isDarkMode } = useTheme();
-  const [groupName, setGroupName] = useState('');
-  const [contacts, setContacts] = useState([]);
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [creating, setCreating] = useState(false);
+const returnStart = content.indexOf('return (');
 
-  useEffect(() => {
-    if (isOpen) {
-      fetchContacts();
-      setGroupName('');
-      setSelectedIds([]);
-    }
-  }, [isOpen]);
-
-  const fetchContacts = async () => {
-    setLoading(true);
-    try {
-      const res = await api.getConversations();
-      const userContacts = res.conversations
-        .filter(c => !c.contact?.isGroup && c.contact)
-        .map(c => c.contact);
-      
-      const uniqueContacts = Array.from(new Map(userContacts.map(c => [c.id, c])).values());
-      setContacts(uniqueContacts);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const toggleContact = (id) => {
-    setSelectedIds(prev => 
-      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
-    );
-  };
-
-  const handleCreate = async () => {
-    if (!groupName.trim() || selectedIds.length === 0) return;
-    setCreating(true);
-    try {
-      const res = await api.request('/chat/group', {
-        method: 'POST',
-        body: JSON.stringify({ name: groupName, participants: selectedIds })
-      });
-      if (res.success) {
-        onGroupCreated();
-        onClose();
-      }
-    } catch (err) {
-      console.error('Failed to create group:', err);
-    } finally {
-      setCreating(false);
-    }
-  };
-
-  if (!isOpen) return null;
-
-  return (
+const newReturn = `return (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }} 
@@ -79,12 +19,12 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
           animate={{ y: 0 }} 
           exit={{ y: '100%' }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className={`relative w-full max-w-md h-[85vh] sm:h-[650px] flex flex-col rounded-t-3xl sm:rounded-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] overflow-hidden border-t ${
+          className={\`relative w-full max-w-md h-[85vh] sm:h-[650px] flex flex-col rounded-t-3xl sm:rounded-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] overflow-hidden border-t \${
             isDarkMode ? 'bg-gradient-to-b from-[#0B1220] to-[#0F1829] border-teal-500/20 text-white' : 'bg-gradient-to-b from-[#FFFFFF] to-[#F6F9FF] border-slate-200 text-slate-900'
-          }`}
+          }\`}
         >
           {/* Header */}
-          <div className={`flex items-center justify-between p-5 border-b ${isDarkMode ? 'border-white/5' : 'border-slate-200/60'}`}>
+          <div className={\`flex items-center justify-between p-5 border-b \${isDarkMode ? 'border-white/5' : 'border-slate-200/60'}\`}>
             <div className="flex items-center gap-3.5">
               <div className="w-11 h-11 rounded-full bg-gradient-to-br from-blue-500 to-teal-400 flex items-center justify-center shadow-[0_0_15px_rgba(45,212,191,0.4)]">
                 <Users className="w-5 h-5 text-white drop-shadow-md" />
@@ -92,9 +32,9 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
               <div>
                 <h2 className="text-lg font-black tracking-tight">New Group</h2>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider ${
+                  <span className={\`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider \${
                     isDarkMode ? 'bg-blue-500/20 text-blue-300' : 'bg-blue-100 text-blue-600'
-                  }`}>
+                  }\`}>
                     {selectedIds.length} SELECTED
                   </span>
                 </div>
@@ -102,9 +42,9 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
             </div>
             <button 
               onClick={onClose} 
-              className={`p-2.5 rounded-full backdrop-blur-xl border transition-all active:scale-90 ${
+              className={\`p-2.5 rounded-full backdrop-blur-xl border transition-all active:scale-90 \${
                 isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10 text-slate-300 hover:text-white' : 'bg-slate-50 border-slate-200 hover:bg-slate-100 text-slate-600 hover:text-slate-900'
-              }`}
+              }\`}
             >
               <X className="w-5 h-5" />
             </button>
@@ -112,16 +52,16 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
 
           {/* Group Name Input */}
           <div className="p-4 shrink-0">
-            <div className={`relative group p-1 rounded-2xl transition-all duration-300 ${
+            <div className={\`relative group p-1 rounded-2xl transition-all duration-300 \${
               isDarkMode ? 'bg-white/5 border border-white/10 focus-within:bg-white/10' : 'bg-white border border-slate-200 focus-within:bg-slate-50 shadow-sm'
-            }`}>
+            }\`}>
               <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-teal-400 rounded-2xl opacity-0 group-focus-within:opacity-40 blur transition duration-300"></div>
               <input
                 type="text"
                 placeholder="Group Name (e.g. Family, Office Team)"
                 value={groupName}
                 onChange={(e) => setGroupName(e.target.value)}
-                className={`relative w-full bg-transparent text-base font-black px-4 py-3 rounded-xl focus:outline-none placeholder-slate-400 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
+                className={\`relative w-full bg-transparent text-base font-black px-4 py-3 rounded-xl focus:outline-none placeholder-slate-400 \${isDarkMode ? 'text-white' : 'text-slate-900'}\`}
                 autoFocus
               />
             </div>
@@ -165,7 +105,7 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
                       whileHover={{ scale: 1.01 }}
                       key={c.id} 
                       onClick={() => toggleContact(c.id)}
-                      className={`flex items-center gap-4 p-3 rounded-2xl cursor-pointer transition-all duration-300 ${
+                      className={\`flex items-center gap-4 p-3 rounded-2xl cursor-pointer transition-all duration-300 \${
                         isSelected 
                           ? isDarkMode 
                             ? 'bg-gradient-to-r from-blue-500/15 to-teal-500/5 border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.1)]' 
@@ -173,12 +113,12 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
                           : isDarkMode 
                             ? 'border border-transparent hover:bg-amber-500/5 hover:border-amber-500/10' 
                             : 'border border-transparent hover:bg-amber-50 hover:border-amber-100'
-                      }`}
+                      }\`}
                     >
                       <div className="relative flex-shrink-0">
-                        <div className={`p-0.5 rounded-full transition-all duration-300 ${
+                        <div className={\`p-0.5 rounded-full transition-all duration-300 \${
                           isSelected ? 'bg-gradient-to-tr from-blue-500 to-teal-400' : 'bg-transparent'
-                        }`}>
+                        }\`}>
                           <img src={c.avatar} alt={c.name} className="w-12 h-12 rounded-full object-cover border-2 border-transparent" style={{ borderColor: isDarkMode ? '#0F1829' : '#FFFFFF' }} />
                         </div>
                         <AnimatePresence>
@@ -195,8 +135,8 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
                         </AnimatePresence>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className={`font-black truncate ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{c.name}</h4>
-                        <p className={`text-[11px] font-semibold truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{c.phone}</p>
+                        <h4 className={\`font-black truncate \${isDarkMode ? 'text-white' : 'text-slate-900'}\`}>{c.name}</h4>
+                        <p className={\`text-[11px] font-semibold truncate \${isDarkMode ? 'text-slate-400' : 'text-slate-500'}\`}>{c.phone}</p>
                       </div>
                     </motion.div>
                   );
@@ -206,7 +146,7 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
           </div>
 
           {/* Create Button Footer */}
-          <div className={`p-5 shrink-0 border-t ${isDarkMode ? 'bg-gradient-to-b from-[#0F1829] to-[#0B1220] border-white/5' : 'bg-white border-slate-200/60'}`}>
+          <div className={\`p-5 shrink-0 border-t \${isDarkMode ? 'bg-gradient-to-b from-[#0F1829] to-[#0B1220] border-white/5' : 'bg-white border-slate-200/60'}\`}>
             <motion.div
               animate={{ scale: (!groupName.trim() || selectedIds.length === 0 || creating) ? 1 : [1, 1.05, 1] }}
               transition={{ duration: 0.3 }}
@@ -214,11 +154,11 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
               <button
                 onClick={handleCreate}
                 disabled={creating || !groupName.trim() || selectedIds.length === 0}
-                className={`w-full py-4 rounded-xl font-black text-[13px] tracking-widest uppercase transition-all duration-300 flex justify-center items-center gap-2 relative overflow-hidden group ${
+                className={\`w-full py-4 rounded-xl font-black text-[13px] tracking-widest uppercase transition-all duration-300 flex justify-center items-center gap-2 relative overflow-hidden group \${
                   (!groupName.trim() || selectedIds.length === 0 || creating)
                     ? isDarkMode ? 'bg-white/5 text-slate-500 cursor-not-allowed' : 'bg-slate-100 text-slate-400 cursor-not-allowed'
                     : 'bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-[0_8px_20px_rgba(45,212,191,0.4)] hover:shadow-[0_10px_25px_rgba(45,212,191,0.6)] active:scale-[0.98]'
-                }`}
+                }\`}
               >
                 {!(!groupName.trim() || selectedIds.length === 0 || creating) && (
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] group-hover:animate-[shimmer_2s_infinite]" />
@@ -235,5 +175,9 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
       </motion.div>
     </AnimatePresence>
   );
+`;
 
-}
+content = content.substring(0, returnStart) + newReturn + '\n}';
+
+fs.writeFileSync(file, content);
+console.log('Replaced return block in CreateGroupModal');
