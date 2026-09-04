@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MMKV } from 'react-native-mmkv';
+const storage = new MMKV();
 import { supabase } from '../services/supabase';
 import { api } from '../services/api';
 import { useAuth } from './AuthContext';
@@ -21,19 +23,19 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Load conversations from real API
   const loadConversations = useCallback(async () => {
-      await AsyncStorage.removeItem('@active_chats'); // FORCE CLEAR CACHE
+      
     if (!user?.id) return;
     setLoadingConversations(true);
     try {
       const res = await api.getConversations();
       if (res.success && res.conversations) {
         setActiveChats(res.conversations);
-        await AsyncStorage.setItem('@active_chats', JSON.stringify(res.conversations));
+        await storage.set('@active_chats', JSON.stringify(res.conversations));
       }
     } catch (e) {
       console.error('Failed to load conversations from API:', e);
       // Fallback to cached data
-      const stored = await AsyncStorage.getItem('@active_chats');
+      const stored = storage.getString('@active_chats');
       if (stored) setActiveChats(JSON.parse(stored));
     } finally {
       setLoadingConversations(false);
@@ -43,10 +45,10 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const loadLocalData = async () => {
       try {
-        const storedReplies = await AsyncStorage.getItem('@quick_replies');
+        const storedReplies = storage.getString('@quick_replies');
         if (storedReplies) setQuickReplies(JSON.parse(storedReplies));
         else setQuickReplies([]);
-        const storedMessages = await AsyncStorage.getItem('@chat_messages');
+        const storedMessages = storage.getString('@chat_messages');
         if (storedMessages) setMessages(JSON.parse(storedMessages));
       } catch (e) {
         console.error('Failed to load local chats', e);
@@ -61,10 +63,15 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     
     if (!socket) return;
     const handleNewMessage = (newMsg) => {
-      setChatMessages(prev => {
-        if (prev.find(m => m.id === newMsg.id)) return prev;
-        return [...prev, newMsg].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-      });
+      setMessages(prev => {
+          const chatId = newMsg.chat_id;
+          const chatMsgs = prev[chatId] || [];
+          if (chatMsgs.find(m => m.id === newMsg.id)) return prev;
+          const updatedMsgs = [...chatMsgs, newMsg].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()); // sort desc
+          const updatedState = { ...prev, [chatId]: updatedMsgs };
+          storage.set('@chat_messages', JSON.stringify(updatedState));
+          return updatedState;
+        });
     };
     
     socket.on('message:received', handleNewMessage);
@@ -100,7 +107,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         const updated = prev.map(chat => 
           (chat.contact?.id === chatId || chat.chatId === chatId) ? { ...chat, unreadCount: 0 } : chat
         );
-        AsyncStorage.setItem('@active_chats', JSON.stringify(updated));
+        storage.set('@active_chats', JSON.stringify(updated));
         return updated;
       });
       await api.markMessagesAsRead(chatId);
@@ -116,7 +123,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         ...prev,
         [chatId]: (prev[chatId] || []).map(m => m.id === messageId ? { ...m, ...updates } : m)
       };
-      AsyncStorage.setItem('@chat_messages', JSON.stringify(updated));
+      storage.set('@chat_messages', JSON.stringify(updated));
       return updated;
     });
   };
@@ -128,7 +135,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
           ...prev,
           [chatId]: (prev[chatId] || []).filter(m => m.id !== messageId)
         };
-        AsyncStorage.setItem('@chat_messages', JSON.stringify(updated));
+        storage.set('@chat_messages', JSON.stringify(updated));
         return updated;
       });
       await api.deleteMessage(messageId);
@@ -168,7 +175,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     // 1. Update UI Optimistically
     setMessages(prev => {
       const updated = { ...prev, [chatId]: [newMessage, ...(prev[chatId] || [])] };
-      AsyncStorage.setItem('@chat_messages', JSON.stringify(updated));
+      storage.set('@chat_messages', JSON.stringify(updated));
       return updated;
     });
 
@@ -176,7 +183,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       const updated = prev.map(chat => 
         (chat.contact?.id === chatId || chat.chatId === chatId) ? { ...chat, lastMessage: type === 'audio' ? '🎵 Voice Note' : type === 'document' ? '📎 Document' : type === 'image' ? '📷 Image' : type === 'money_request' ? '💵 Payment Request' : type === 'checklist' ? '✅ Checklist' : text, time: 'Just now' } : chat
       );
-      AsyncStorage.setItem('@active_chats', JSON.stringify(updated));
+      storage.set('@active_chats', JSON.stringify(updated));
       return updated;
     });
 
@@ -291,7 +298,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
           const existingIds = new Set((prev[chatId] || []).map(m => m.id));
           const newMsgs = decryptedMsgs.filter(m => !existingIds.has(m.id));
           const updated = [...(prev[chatId] || []), ...newMsgs];
-          // AsyncStorage.setItem('@chat_messages', JSON.stringify({ ...prev, [chatId]: updated }));
+          storage.set('@chat_messages', JSON.stringify({ ...prev, [chatId]: updated }));
           return { ...prev, [chatId]: updated };
         });
       }
@@ -322,7 +329,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         return m;
       });
       const updated = { ...prev, [chatId]: updatedMsgs };
-      AsyncStorage.setItem('@chat_messages', JSON.stringify(updated));
+      storage.set('@chat_messages', JSON.stringify(updated));
       return updated;
     });
   };
