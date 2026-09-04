@@ -1,23 +1,10 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Download, ZoomIn, ZoomOut } from 'lucide-react';
+﻿const fs = require('fs');
+const file = 'mobile/src/components/ImageViewerModal.jsx';
+let content = fs.readFileSync(file, 'utf8');
 
-export default function ImageViewerModal({ isOpen, imageUrl, onClose }) {
-  const [scale, setScale] = useState(1);
+const returnStart = content.indexOf('return (');
 
-  
-
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = imageUrl;
-    link.download = 'downloaded_image.jpg';
-    link.target = '_blank';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  return (
+const newReturn = `return (
     <AnimatePresence>
       {isOpen && imageUrl && (
         <motion.div
@@ -78,5 +65,10 @@ export default function ImageViewerModal({ isOpen, imageUrl, onClose }) {
       )}
     </AnimatePresence>
   );
+`;
 
-}
+content = content.substring(0, returnStart) + newReturn + '\n}';
+content = content.replace('if (!isOpen || !imageUrl) return null;', '');
+
+fs.writeFileSync(file, content);
+console.log('Replaced return block in ImageViewerModal');
