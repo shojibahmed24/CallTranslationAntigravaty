@@ -1,62 +1,10 @@
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Camera, Loader2, Save, User as UserIcon } from 'lucide-react';
-import { api } from '../services/api';
-import { useAuth } from '../context/AuthContext';
+﻿const fs = require('fs');
+const file = 'mobile/src/components/EditProfileModal.jsx';
+let content = fs.readFileSync(file, 'utf8');
 
-export default function EditProfileModal({ isOpen, onClose }) {
-  const { user, updateUserProfile } = useAuth();
-  
-  const [name, setName] = useState(user?.name || '');
-  const [about, setAbout] = useState(user?.status || '');
-  const [avatarPreview, setAvatarPreview] = useState(user?.profile_picture || '');
-  const [avatarFile, setAvatarFile] = useState(null);
-  
-  const [loading, setLoading] = useState(false);
-  const fileInputRef = useRef(null);
+const returnStart = content.indexOf('return (');
 
-  if (!isOpen) return null;
-
-  const handleImageSelect = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setAvatarFile(file);
-    setAvatarPreview(URL.createObjectURL(file));
-  };
-
-  const handleSave = async () => {
-    if (!name.trim()) return;
-    setLoading(true);
-    try {
-      let finalAvatarUrl = user?.profile_picture;
-
-      // 1. Upload new image if selected
-      if (avatarFile) {
-        const uploadData = await api.uploadFile(avatarFile, 'profile');
-        if (uploadData.success && uploadData.file?.url) {
-          finalAvatarUrl = uploadData.file.url;
-        } else {
-          throw new Error('Image upload failed');
-        }
-      }
-
-      // 2. Update profile data
-      await updateUserProfile({
-        name: name.trim(),
-        about: about.trim(),
-        avatar: finalAvatarUrl
-      });
-      
-      onClose();
-    } catch (err) {
-      console.error(err);
-      alert('Failed to update profile.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
+const newReturn = `return (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
@@ -196,5 +144,9 @@ export default function EditProfileModal({ isOpen, onClose }) {
       </motion.div>
     </AnimatePresence>
   );
+`;
 
-}
+content = content.substring(0, returnStart) + newReturn + '\n}';
+
+fs.writeFileSync(file, content);
+console.log('Replaced return block in EditProfileModal');
