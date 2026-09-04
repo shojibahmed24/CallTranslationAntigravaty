@@ -1,96 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Copy, Check, ShieldCheck, AlertTriangle, Send, Camera, Image as ImageIcon } from 'lucide-react';
-import { api } from '../../services/api';
-import { useTheme } from '../../context/ThemeContext';
+﻿const fs = require('fs');
+const file = 'mobile/src/screens/subscription/UsdtPaymentScreen.jsx';
+let content = fs.readFileSync(file, 'utf8');
 
-export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
-  const { isDarkMode } = useTheme();
+if (!content.includes('framer-motion')) {
+  content = content.replace("import React, { useState, useEffect } from 'react';", "import React, { useState, useEffect } from 'react';\nimport { motion, AnimatePresence } from 'framer-motion';");
+}
+if (!content.includes('Image as ImageIcon')) {
+  content = content.replace("Camera } from 'lucide-react'", "Camera, Image as ImageIcon } from 'lucide-react'");
+}
 
-  const [paymentDetails, setPaymentDetails] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState('bkash'); // bkash, nagad, rocket, usdt
-  const [txHash, setTxHash] = useState('');
-  const [screenshotFile, setScreenshotFile] = useState(null);
-  const [copied, setCopied] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [submittedMessage, setSubmittedMessage] = useState('');
+const funcStart = content.indexOf('export default function UsdtPaymentScreen');
+const returnStart = content.indexOf('return (', funcStart);
 
-  useEffect(() => {
-    const fetchWallet = async () => {
-      try {
-        const res = await api.getPlansAndWallet();
-        setPaymentDetails(res.manualPaymentDetails);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchWallet();
-  }, []);
-
-  const handleCopy = (text) => {
-    if (!text) return;
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleSubmitTx = async (e) => {
-    e.preventDefault();
-    if (!txHash.trim()) return;
-
-    setSubmitting(true);
-    try {
-      let screenshotUrl = null;
-
-      if (screenshotFile) {
-        const formData = new FormData();
-        formData.append('file', screenshotFile);
-        const resUpload = await fetch('http://localhost:5000/api/storage/upload?type=payment', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          },
-          body: formData
-        });
-        const uploadData = await resUpload.json();
-        if (!uploadData.success) throw new Error(uploadData.message);
-        screenshotUrl = uploadData.file.url;
-      }
-
-      await api.submitManualPayment({
-        planId: selectedPlan.id,
-        txHash: txHash.trim(),
-        paymentMethod: paymentMethod,
-        screenshotUrl: screenshotUrl || ''
-      });
-
-      setSubmittedMessage(`Your ${paymentMethod.toUpperCase()} transaction was submitted with the screenshot. Our Admin team will verify it and activate your plan shortly!`);
-      setTimeout(() => {
-        onSuccess();
-      }, 4000);
-    } catch (err) {
-      alert('Failed to submit Payment: ' + err.message);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const planPriceUSD = selectedPlan?.priceUSD || 9.99;
-  const planPriceBDT = selectedPlan?.priceBDT || (planPriceUSD * 120);
-
-  const getActiveAddress = () => {
-    if (!paymentDetails) return '';
-    if (paymentMethod === 'usdt') return paymentDetails.usdt.walletAddress;
-    return paymentDetails[paymentMethod];
-  };
-
-  return (
-    <div className={`min-h-[100dvh] flex flex-col px-4 pt-[max(env(safe-area-inset-top),1rem)] pb-[max(env(safe-area-inset-bottom),1rem)] max-w-md mx-auto justify-between overflow-y-auto ${
+const newReturn = `return (
+    <div className={\`min-h-[100dvh] flex flex-col px-4 pt-[max(env(safe-area-inset-top),1rem)] pb-[max(env(safe-area-inset-bottom),1rem)] max-w-md mx-auto justify-between overflow-y-auto \${
       isDarkMode ? 'bg-gradient-to-b from-[#0B1220] via-[#0F1829] to-[#0D1524] text-white' : 'bg-gradient-to-b from-[#FFFFFF] to-[#E0F2FE] text-slate-900'
-    }`}>
+    }\`}>
       {/* Header */}
       <motion.div 
         initial={{ opacity: 0, y: -10 }}
@@ -99,16 +24,16 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
       >
         <button 
           onClick={onBack} 
-          className={`p-2.5 rounded-full backdrop-blur-xl border transition-all active:scale-90 ${
+          className={\`p-2.5 rounded-full backdrop-blur-xl border transition-all active:scale-90 \${
             isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10 text-slate-300 hover:text-white' : 'bg-white/50 border-slate-200 hover:bg-white text-slate-600 hover:text-slate-900'
-          }`}
+          }\`}
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
           <h1 className="text-lg font-black tracking-tight">Manual Payment</h1>
           <p className="text-xs font-semibold mt-0.5 text-slate-400">
-            {selectedPlan?.name} — <span className="text-teal-400 font-bold drop-shadow-[0_0_5px_rgba(45,212,191,0.5)] tracking-wide">{paymentMethod === 'usdt' ? `$${planPriceUSD}` : `৳${planPriceBDT}`}</span>
+            {selectedPlan?.name} — <span className="text-teal-400 font-bold drop-shadow-[0_0_5px_rgba(45,212,191,0.5)] tracking-wide">{paymentMethod === 'usdt' ? \`\$\${planPriceUSD}\` : \`৳\${planPriceBDT}\`}</span>
           </p>
         </div>
       </motion.div>
@@ -118,9 +43,9 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className={`p-8 rounded-[32px] border text-center space-y-5 my-auto shadow-2xl backdrop-blur-md ${
+          className={\`p-8 rounded-[32px] border text-center space-y-5 my-auto shadow-2xl backdrop-blur-md \${
             isDarkMode ? 'bg-[#0F1829]/80 border-teal-500/30 shadow-[0_0_40px_rgba(20,184,166,0.15)]' : 'bg-white/90 border-teal-500/20 shadow-[0_10px_40px_rgba(20,184,166,0.15)]'
-          }`}
+          }\`}
         >
           <motion.div 
             initial={{ scale: 0 }}
@@ -140,7 +65,7 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
           
           <div className="space-y-2">
             <h2 className="text-xl font-black text-teal-400">Payment Under Review</h2>
-            <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+            <p className={\`text-sm leading-relaxed \${isDarkMode ? 'text-slate-300' : 'text-slate-600'}\`}>
               {submittedMessage}
             </p>
           </div>
@@ -162,11 +87,11 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
               <button
                 key={method}
                 onClick={() => setPaymentMethod(method)}
-                className={`relative py-2.5 rounded-xl text-[10.5px] font-bold uppercase tracking-wider transition-colors z-10 ${
+                className={\`relative py-2.5 rounded-xl text-[10.5px] font-bold uppercase tracking-wider transition-colors z-10 \${
                   paymentMethod === method 
                     ? 'text-white' 
                     : isDarkMode ? 'text-slate-400 hover:text-slate-300' : 'text-slate-500 hover:text-slate-700'
-                }`}
+                }\`}
               >
                 {paymentMethod === method && (
                   <motion.div
@@ -189,7 +114,7 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
               </div>
               <div className="relative z-10 leading-relaxed">
                 <strong className="block text-amber-400 uppercase tracking-widest text-[10px] mb-0.5">{paymentMethod} Payment</strong>
-                Send exactly <strong className="text-amber-300 font-black">{paymentMethod === 'usdt' ? `$${planPriceUSD} USDT (TRC-20)` : `৳${planPriceBDT} BDT`}</strong>. 
+                Send exactly <strong className="text-amber-300 font-black">{paymentMethod === 'usdt' ? \`\$\${planPriceUSD} USDT (TRC-20)\` : \`৳\${planPriceBDT} BDT\`}</strong>. 
                 {paymentMethod !== 'usdt' && ' Please upload the success screenshot.'}
               </div>
             </div>
@@ -198,9 +123,9 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
           {/* Wallet / Number Box */}
           <motion.div 
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-            className={`p-6 rounded-3xl border flex flex-col items-center gap-4 shadow-xl backdrop-blur-md transition-colors ${
+            className={\`p-6 rounded-3xl border flex flex-col items-center gap-4 shadow-xl backdrop-blur-md transition-colors \${
               isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white/70 border-slate-200/50'
-            }`}
+            }\`}
           >
             <AnimatePresence mode="popLayout">
               {paymentMethod === 'usdt' && (
@@ -222,21 +147,21 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
 
             <div className="w-full space-y-2 text-center">
               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                {paymentMethod === 'usdt' ? 'USDT (TRC-20) Wallet' : `${paymentMethod} Number (Send Money)`}
+                {paymentMethod === 'usdt' ? 'USDT (TRC-20) Wallet' : \`\${paymentMethod} Number (Send Money)\`}
               </span>
-              <div className={`flex items-center gap-2 p-2 rounded-2xl border shadow-inner transition-colors ${
+              <div className={\`flex items-center gap-2 p-2 rounded-2xl border shadow-inner transition-colors \${
                 isDarkMode ? 'bg-black/20 border-white/10' : 'bg-slate-100 border-slate-200'
-              }`}>
+              }\`}>
                 <code className="text-[13px] font-mono text-teal-400 font-bold flex-1 truncate px-2 select-all drop-shadow-sm">
                   {getActiveAddress() || 'Loading...'}
                 </code>
                 <button
                   onClick={() => handleCopy(getActiveAddress())}
-                  className={`relative p-2.5 rounded-xl transition-all active:scale-95 ${
+                  className={\`relative p-2.5 rounded-xl transition-all active:scale-95 \${
                     copied 
                       ? 'bg-emerald-500/20 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.2)]' 
                       : isDarkMode ? 'bg-white/10 text-slate-300 hover:text-white hover:bg-white/20' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
+                  }\`}
                 >
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -257,7 +182,7 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
           {/* Form */}
           <motion.form variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} onSubmit={handleSubmitTx} className="space-y-5">
             <div>
-              <label className={`block text-[11px] font-bold tracking-wider mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+              <label className={\`block text-[11px] font-bold tracking-wider mb-2 \${isDarkMode ? 'text-slate-300' : 'text-slate-600'}\`}>
                 TRANSACTION ID (TxHash/TrxID)
               </label>
               <div className="relative group">
@@ -268,21 +193,21 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
                   onChange={(e) => setTxHash(e.target.value)}
                   placeholder="Paste TrxID e.g. 9JA7B..."
                   required
-                  className={`relative w-full px-4 py-3.5 rounded-2xl text-xs font-mono border backdrop-blur-md transition-colors focus:outline-none focus:border-teal-400 shadow-sm ${
+                  className={\`relative w-full px-4 py-3.5 rounded-2xl text-xs font-mono border backdrop-blur-md transition-colors focus:outline-none focus:border-teal-400 shadow-sm \${
                     isDarkMode ? 'bg-white/5 border-white/10 text-white placeholder-slate-500' : 'bg-white/70 border-slate-200 text-slate-900 placeholder-slate-400'
-                  }`}
+                  }\`}
                 />
               </div>
             </div>
 
             {/* Screenshot Upload Drop-Zone */}
             <div>
-              <label className={`block text-[11px] font-bold tracking-wider mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+              <label className={\`block text-[11px] font-bold tracking-wider mb-2 \${isDarkMode ? 'text-slate-300' : 'text-slate-600'}\`}>
                 PAYMENT SCREENSHOT
               </label>
-              <label className={`relative flex items-center justify-center w-full px-4 py-6 border-2 border-dashed rounded-3xl cursor-pointer transition-all group overflow-hidden ${
+              <label className={\`relative flex items-center justify-center w-full px-4 py-6 border-2 border-dashed rounded-3xl cursor-pointer transition-all group overflow-hidden \${
                 isDarkMode ? 'bg-white/5 border-teal-500/30 hover:bg-white/10 hover:border-teal-400/50' : 'bg-white/60 border-teal-500/30 hover:bg-teal-50/50 hover:border-teal-400/50'
-              }`}>
+              }\`}>
                 <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 
                 <div className="flex flex-col items-center gap-3 relative z-10">
@@ -291,7 +216,7 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
                       <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shadow-inner">
                         <Check className="w-6 h-6" />
                       </div>
-                      <span className={`text-xs font-bold ${isDarkMode ? 'text-teal-400' : 'text-teal-600'} flex items-center gap-1.5`}>
+                      <span className={\`text-xs font-bold \${isDarkMode ? 'text-teal-400' : 'text-teal-600'} flex items-center gap-1.5\`}>
                         <ImageIcon className="w-3.5 h-3.5" />
                         <span className="truncate max-w-[200px]">{screenshotFile.name}</span>
                       </span>
@@ -302,7 +227,7 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
                         <Camera className="w-5 h-5 drop-shadow-sm" />
                       </div>
                       <div className="text-center">
-                        <span className={`text-xs font-bold block ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                        <span className={\`text-xs font-bold block \${isDarkMode ? 'text-slate-300' : 'text-slate-700'}\`}>
                           Tap to select screenshot
                         </span>
                         <span className="text-[10px] text-slate-500 font-medium">JPEG, PNG, WEBP allowed</span>
@@ -330,7 +255,7 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
               )}
               <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
                 {submitting ? 'Submitting...' : 'Submit Payment'}
-                <Send className={`w-4 h-4 ${submitting ? 'animate-pulse' : ''}`} />
+                <Send className={\`w-4 h-4 \${submitting ? 'animate-pulse' : ''}\`} />
               </span>
             </motion.button>
           </motion.form>
@@ -338,5 +263,9 @@ export default function UsdtPaymentScreen({ selectedPlan, onBack, onSuccess }) {
       )}
     </div>
   );
+`;
 
-}
+content = content.substring(0, returnStart) + newReturn + '\n}';
+
+fs.writeFileSync(file, content);
+console.log('Replaced return block in UsdtPaymentScreen');
