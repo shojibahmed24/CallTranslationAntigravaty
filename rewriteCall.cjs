@@ -1,76 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { PhoneOff, Mic, MicOff, Volume2, Volume1, Lock, Sparkles } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { useCall } from '../../context/CallContext';
-import { LiveKitRoom, RoomAudioRenderer, VideoConference } from '@livekit/components-react';
-import '@livekit/components-styles';
-import { motion, AnimatePresence } from 'framer-motion';
+﻿const fs = require('fs');
+const file = 'mobile/src/screens/call/LiveCallScreen.jsx';
+let content = fs.readFileSync(file, 'utf8');
 
-export default function LiveCallScreen() {
-  const { user } = useAuth();
-  const { 
-    activeCall, callDuration, isMuted, setIsMuted, 
-    isSpeakerOn, setIsSpeakerOn, speakInCall, endCurrentCall 
-  } = useCall();
+if (!content.includes('Sparkles')) {
+  content = content.replace("Volume1, Lock", "Volume1, Lock, Sparkles");
+}
+if (!content.includes('AnimatePresence')) {
+  content = content.replace("import { motion } from 'framer-motion';", "import { motion, AnimatePresence } from 'framer-motion';");
+}
 
-  const recognitionRef = useRef(null);
-  const [visualizerLevels, setVisualizerLevels] = useState(Array(5).fill(10));
+const funcStart = content.indexOf('export default function LiveCallScreen');
+const returnStart = content.indexOf('return (', funcStart);
 
-  // Background Magical Translation Engine (MediaRecorder for STT with VAD)
-  useEffect(() => {
-    let mediaRecorder = null;
-    let stream = null;
-    let interval = null;
-    let volumeInterval = null;
-    let audioCtx = null;
-
-    if (activeCall && activeCall.isTranslated && !isMuted) {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then((s) => {
-        stream = s;
-        
-        // VAD (Voice Activity Detection) Setup
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        audioCtx = new AudioContext();
-        const analyser = audioCtx.createAnalyser();
-        const microphone = audioCtx.createMediaStreamSource(stream);
-        microphone.connect(analyser);
-        analyser.fftSize = 256;
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-        let isSpeakingInChunk = false;
-
-        volumeInterval = setInterval(() => {
-          if (stream.active) {
-            analyser.getByteFrequencyData(dataArray);
-            let sum = 0;
-            for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
-            const average = sum / bufferLength;
-            if (average > 15) { // Volume threshold
-              isSpeakingInChunk = true;
-            }
-          }
-        }, 100);
-
-        mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
-        
-        mediaRecorder.ondataavailable = async (e) => {
-          if (e.data.size > 0 && speakInCall && isSpeakingInChunk) {
-            const arrayBuffer = await e.data.arrayBuffer();
-            speakInCall(null, arrayBuffer);
-          }
-          isSpeakingInChunk = false; // reset for next chunk
-        };
-
-        mediaRecorder.start();
-        interval = setInterval(() => {
-          if (mediaRecorder.state === 'recording') {
-            mediaRecorder.stop();
-            mediaRecorder.start();
-          }
-        }, 4000); // 4-second chunks
-      }).catch(err => console.warn("MediaRecorder setup failed:", err));
-
-      return (
+const newReturn = `return (
     <motion.div 
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       className="fixed inset-0 bg-[#060B13] z-50 flex flex-col justify-between font-sans text-white overflow-hidden"
@@ -137,7 +79,7 @@ export default function LiveCallScreen() {
             
             <h2 className="text-4xl font-medium tracking-tight mb-2 text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]">{peer?.name}</h2>
             
-            <p className={`text-lg font-medium tracking-wide ${callDuration > 0 ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'text-emerald-400 animate-pulse drop-shadow-[0_0_12px_rgba(16,185,129,0.8)]'}`}>
+            <p className={\`text-lg font-medium tracking-wide \${callDuration > 0 ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'text-emerald-400 animate-pulse drop-shadow-[0_0_12px_rgba(16,185,129,0.8)]'}\`}>
               {callDuration > 0 ? formatDuration(callDuration) : 'Calling...'}
             </p>
             
@@ -146,11 +88,11 @@ export default function LiveCallScreen() {
               {visualizerLevels.map((level, i) => (
                 <motion.div
                   key={i}
-                  animate={{ height: `${level}px` }}
+                  animate={{ height: \`\${level}px\` }}
                   transition={{ type: 'spring', bounce: 0, duration: 0.15 }}
-                  className={`w-1.5 rounded-full ${
+                  className={\`w-1.5 rounded-full \${
                     i % 3 === 0 ? 'bg-emerald-400' : i % 3 === 1 ? 'bg-teal-400' : 'bg-blue-400'
-                  } shadow-[0_0_8px_currentColor]`}
+                  } shadow-[0_0_8px_currentColor]\`}
                 />
               ))}
             </div>
@@ -186,9 +128,9 @@ export default function LiveCallScreen() {
             {/* Speaker Button */}
             <button
               onClick={() => setIsSpeakerOn(!isSpeakerOn)}
-              className={`relative overflow-hidden p-4 rounded-full flex items-center justify-center transition-all duration-300 active:scale-95 ${
+              className={\`relative overflow-hidden p-4 rounded-full flex items-center justify-center transition-all duration-300 active:scale-95 \${
                 isSpeakerOn ? 'bg-gradient-to-tr from-blue-500 to-teal-400 text-white shadow-[0_0_20px_rgba(45,212,191,0.4)]' : 'bg-black/30 text-white hover:bg-black/40 border border-white/10'
-              }`}
+              }\`}
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -215,9 +157,9 @@ export default function LiveCallScreen() {
             {/* Mute Button */}
             <button
               onClick={() => setIsMuted(!isMuted)}
-              className={`relative overflow-hidden p-4 rounded-full flex items-center justify-center transition-all duration-300 active:scale-95 ${
+              className={\`relative overflow-hidden p-4 rounded-full flex items-center justify-center transition-all duration-300 active:scale-95 \${
                 isMuted ? 'bg-gradient-to-tr from-amber-500 to-orange-400 text-white shadow-[0_0_20px_rgba(245,158,11,0.4)]' : 'bg-black/30 text-white hover:bg-black/40 border border-white/10'
-              }`}
+              }\`}
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -236,5 +178,9 @@ export default function LiveCallScreen() {
       </motion.div>
     </motion.div>
   );
+`;
 
-}
+content = content.substring(0, returnStart) + newReturn + '\n}';
+
+fs.writeFileSync(file, content);
+console.log('Replaced return block in LiveCallScreen');
