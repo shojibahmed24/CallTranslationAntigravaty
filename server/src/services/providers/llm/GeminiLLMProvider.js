@@ -10,6 +10,18 @@ class GeminiLLMProvider {
     }
   }
 
+  
+  async generateSummary(prompt) {
+    if (!this.model) await this.initialize();
+    try {
+      const result = await this.model.generateContent(prompt);
+      return result.response.text();
+    } catch (error) {
+      console.error('Gemini Summary Error:', error);
+      return 'Summary could not be generated.';
+    }
+  }
+
   async translate(text, sourceLang, targetLang, contextHistory = []) {
     if (!this.model) {
       throw new Error('Gemini API key is missing. Cannot translate.');

@@ -145,7 +145,7 @@ export class AITranslationService {
       session.contextHistory.push({
         speakerId,
         sourceLang,
-        original: rawText,
+        original: textToTranslate,
         translated: translatedText,
         timestamp: Date.now()
       });
