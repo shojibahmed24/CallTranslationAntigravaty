@@ -361,4 +361,3 @@ export default function ContactsScreen({ onSelectChat, onNewContact }) {
     </div>
   );
 }
-}
