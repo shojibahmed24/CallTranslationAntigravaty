@@ -1,19 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { PhoneOff, Sparkles, Globe, Phone, Video } from 'lucide-react';
-import { useCall } from '../../context/CallContext';
-import { startRingingTone, stopTone } from '../../utils/audioUtils';
-import { motion, useAnimation } from 'framer-motion';
+﻿const fs = require('fs');
+const file = 'mobile/src/screens/call/IncomingCallModal.jsx';
+let content = fs.readFileSync(file, 'utf8');
 
-export default function IncomingCallModal() {
-  const { incomingCall, acceptIncomingCall, rejectIncomingCall } = useCall();
-  const controls = useAnimation();
-  const [answered, setAnswered] = useState(false);
+const returnStart = content.indexOf('return (');
 
-  useEffect(() => {
-    if (incomingCall) {
-      startRingingTone();
-    }
-    return (
+const newReturn = `return (
     <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -159,5 +150,9 @@ export default function IncomingCallModal() {
       </div>
     </motion.div>
   );
+`;
 
-}
+content = content.substring(0, returnStart) + newReturn + '\n}';
+
+fs.writeFileSync(file, content);
+console.log('Replaced return block in IncomingCallModal again');
