@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, ArrowRight, Shield, Globe, UserCheck, Loader2 } from 'lucide-react';
+import { Phone, ArrowRight, Shield, Globe, UserCheck, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
