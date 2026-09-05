@@ -20,6 +20,7 @@ import { GradientBackground } from '../../src/components/ThemeComponents';
 import { supabase } from '../../src/services/supabase';
 import { api } from '../../src/services/api';
 import { useAuth } from '../../src/context/AuthContext';
+import { useThemeContext } from '../../src/context/ThemeContext';
 import QRCode from 'react-native-qrcode-svg';
 import { useCall } from '../../src/context/CallContext';
 import Animated, {
@@ -159,6 +160,7 @@ const SectionCard = ({ title, children, delay = 0 }: any) => (
 // ─── Main Screen ──────────────────────────────────────────────────
 export default function MyProfileScreen() {
   const { user, updateUserProfile, logout } = useAuth();
+  const { theme, setTheme } = useThemeContext();
   const { callHistory } = useCall();
   const router = useRouter();
 
@@ -369,9 +371,12 @@ export default function MyProfileScreen() {
             <Animated.View entering={FadeInUp.delay(350)} style={styles.nameArea}>
               <XStack alignItems="center" space="$2" justifyContent="center">
                 <TouchableOpacity onPress={() => setEditNameModal(true)} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text fontSize={26} fontWeight="900" color="#0f172a" letterSpacing={-0.5}>
+                  <Text fontSize={26} fontWeight="900" color="#0f172a" letterSpacing={-0.5} marginRight={8}>
                     {user?.name || 'My Profile'}
                   </Text>
+                  <View style={{ backgroundColor: 'rgba(99,102,241,0.1)', padding: 6, borderRadius: 12 }}>
+                    <Edit2 color="#6366f1" size={16} />
+                  </View>
                 </TouchableOpacity>
                 <View style={[styles.planBadge, { overflow: 'hidden', borderColor: 'transparent', borderWidth: 0 }]}>
                   <LinearGradient colors={isPro ? ['#f59e0b', '#fbbf24'] : ['#94a3b8', '#cbd5e1']} start={{x:0, y:0}} end={{x:1, y:1}} style={StyleSheet.absoluteFillObject} />
@@ -597,8 +602,10 @@ export default function MyProfileScreen() {
               <SettingRow
                 icon={<Moon />} iconColors={['#a78bfa', '#8b5cf6']}
                 label="Dark Mode" subtitle="Change app appearance"
-                onPress={() => Alert.alert('Coming soon', 'This feature is coming soon!')}
-                rightElement={<View style={styles.comingSoonBadge}><LinearGradient colors={['#c084fc', '#e879f9']} start={{x:0, y:0}} end={{x:1, y:1}} style={StyleSheet.absoluteFillObject} /><Text color="#fff" fontSize={10} fontWeight="800" style={{ zIndex: 1 }}>SOON</Text></View>}
+                rightElement={<AnimatedToggle value={theme === 'dark'} onValueChange={async (val) => {
+                  Platform.OS !== 'web' && Haptics.impactAsync();
+                  setTheme(val ? 'dark' : 'light');
+                }} />}
                 isLast
               />
             </SectionCard>
