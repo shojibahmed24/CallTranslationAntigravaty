@@ -574,7 +574,7 @@ export default function ChatThreadScreen() {
                     console.error(e);
                   }
                 }}
-                style={{ width: 42, height: 42, borderRadius: 21, overflow: 'hidden', justifyContent: 'center', alignItems: 'center', shadowColor: '#6366f1', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.25, shadowRadius: 8, elevation: 4 }}
+                style={{ width: 42, height: 42, borderRadius: 21, backgroundColor: '#6366f1', overflow: 'hidden', justifyContent: 'center', alignItems: 'center', shadowColor: '#6366f1', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.25, shadowRadius: 8, elevation: 4 }}
               >
                 <LinearGradient colors={['#818cf8', '#4f46e5']} style={StyleSheet.absoluteFillObject} />
                 <Video color="#fff" size={18} />
