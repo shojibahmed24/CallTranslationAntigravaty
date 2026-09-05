@@ -337,6 +337,10 @@ export default function ChatThreadScreen() {
               shadowRadius: 10,
               shadowOffset: { width: 0, height: 4 },
               elevation: msg.isSender ? 6 : 2,
+              borderRadius: 24,
+              borderBottomRightRadius: msg.isSender ? 4 : 24,
+              borderBottomLeftRadius: msg.isSender ? 24 : 4,
+              backgroundColor: msg.isSender ? '#6366f1' : '#f8fafc',
             }}>
               <View style={{
                 backgroundColor: msg.isSender ? '#6366f1' : '#f8fafc',
