@@ -5,12 +5,12 @@ if (Platform.OS === 'web') {
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { TamaguiProvider, Theme, YStack, Spinner, View } from 'tamagui'
 import { Stack, useRouter, useSegments } from 'expo-router'
-// // import * as Sentry from "@sentry/react-native";
+// import * as Sentry from "@sentry/react-native";
 
-// // Sentry.init({
-// //   dsn: process.env.EXPO_PUBLIC_SENTRY_DSN || "https://dummy-dsn@o0.ingest.sentry.io/0",
-// //   tracesSampleRate: 1.0,
-// // });
+// Sentry.init({
+//   dsn: process.env.EXPO_PUBLIC_SENTRY_DSN || "https://dummy-dsn@o0.ingest.sentry.io/0",
+//   tracesSampleRate: 1.0,
+// });
 import { useEffect } from 'react'
 
 import tamaguiConfig from '../tamagui.config'

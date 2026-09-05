@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { LiveKitRoom } from '@livekit/react-native';
 
 export default function LiveKitWrapper({ token, serverUrl, children }) {
@@ -9,6 +9,7 @@ export default function LiveKitWrapper({ token, serverUrl, children }) {
       connect={true}
       audio={true}
       video={false}
+      style={{ flex: 1 }}
     >
       {children}
     </LiveKitRoom>

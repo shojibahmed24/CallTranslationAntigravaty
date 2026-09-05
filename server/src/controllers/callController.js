@@ -52,9 +52,9 @@ export const initiateCall = async (req, res) => {
       .in('status', ['initiating', 'in_progress']);
 
     if (activeCalls && activeCalls.length > 0) {
-      // Ignore stale calls (older than 10 minutes)
-      const tenMinsAgo = new Date(Date.now() - 10 * 60 * 1000);
-      const trulyActive = activeCalls.filter(c => new Date(c.created_at) > tenMinsAgo);
+      // Ignore stale calls (older than 2 hours)
+      const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
+      const trulyActive = activeCalls.filter(c => new Date(c.created_at) > twoHoursAgo);
       if (trulyActive.length > 0) {
         return res.status(409).json({ success: false, message: 'User is currently busy on another call.' });
       }
