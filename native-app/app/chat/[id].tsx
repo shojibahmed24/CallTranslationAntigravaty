@@ -339,7 +339,7 @@ export default function ChatThreadScreen() {
               elevation: msg.isSender ? 6 : 2,
             }}>
               <View style={{
-                backgroundColor: msg.isSender ? 'transparent' : '#f8fafc',
+                backgroundColor: msg.isSender ? '#6366f1' : '#f8fafc',
                 padding: 12,
                 paddingHorizontal: 16,
                 borderRadius: 24,
@@ -555,7 +555,7 @@ export default function ChatThreadScreen() {
                     console.error(e);
                   }
                 }}
-                style={{ width: 42, height: 42, borderRadius: 21, overflow: 'hidden', justifyContent: 'center', alignItems: 'center', shadowColor: '#10b981', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 4 }}
+                style={{ width: 42, height: 42, borderRadius: 21, backgroundColor: '#10b981', overflow: 'hidden', justifyContent: 'center', alignItems: 'center', shadowColor: '#10b981', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 4 }}
               >
                 <LinearGradient colors={['#34d399', '#059669']} style={StyleSheet.absoluteFillObject} />
                 <Phone color="#fff" size={18} />
@@ -709,7 +709,7 @@ export default function ChatThreadScreen() {
             <Text fontWeight="800" marginBottom={12} color="#0f172a">Attachments</Text>
             <XStack space="$4" justifyContent="space-around" marginTop="$2">
               <ScaleButton onPress={() => { setMoneyRequestMode(true); setShowScheduleOptions(false); }} style={{ alignItems: 'center' }}>
-                <View style={{ padding: 16, borderRadius: 24, marginBottom: 8, overflow: 'hidden' }}>
+                <View style={{ padding: 16, borderRadius: 24, marginBottom: 8, overflow: 'hidden', backgroundColor: '#eff6ff' }}>
                   <LinearGradient colors={['#ecfdf5', '#d1fae5']} style={StyleSheet.absoluteFillObject} />
                   <Banknote color="#10b981" size={26} />
                 </View>
@@ -717,14 +717,14 @@ export default function ChatThreadScreen() {
               </ScaleButton>
               
               <ScaleButton onPress={() => { pickDocument(); setShowScheduleOptions(false); }} style={{ alignItems: 'center' }}>
-                <View style={{ padding: 16, borderRadius: 24, marginBottom: 8, overflow: 'hidden' }}>
+                <View style={{ padding: 16, borderRadius: 24, marginBottom: 8, overflow: 'hidden', backgroundColor: '#eff6ff' }}>
                   <LinearGradient colors={['#eff6ff', '#dbeafe']} style={StyleSheet.absoluteFillObject} />
                   <Paperclip color="#3b82f6" size={26} />
                 </View>
                 <Text fontSize={12} color="#475569" fontWeight="600">File</Text>
               </ScaleButton>
               <ScaleButton onPress={() => { pickImage(); setShowScheduleOptions(false); }} style={{ alignItems: 'center' }}>
-                <View style={{ padding: 16, borderRadius: 24, marginBottom: 8, overflow: 'hidden' }}>
+                <View style={{ padding: 16, borderRadius: 24, marginBottom: 8, overflow: 'hidden', backgroundColor: '#eff6ff' }}>
                   <LinearGradient colors={['#fefce8', '#fef08a']} style={StyleSheet.absoluteFillObject} />
                   <ImageIcon color="#eab308" size={26} />
                 </View>
@@ -732,7 +732,7 @@ export default function ChatThreadScreen() {
               </ScaleButton>
                 
                 <ScaleButton onPress={() => { setShowTaskModal(true); setShowScheduleOptions(false); }} style={{ alignItems: 'center' }}>
-                  <View style={{ padding: 16, borderRadius: 24, marginBottom: 8, overflow: 'hidden' }}>
+                  <View style={{ padding: 16, borderRadius: 24, marginBottom: 8, overflow: 'hidden', backgroundColor: '#eff6ff' }}>
                     <LinearGradient colors={['#eef2ff', '#e0e7ff']} style={StyleSheet.absoluteFillObject} />
                     <CheckSquare color="#6366f1" size={26} />
                   </View>
@@ -748,7 +748,7 @@ export default function ChatThreadScreen() {
             <ScrollView keyboardShouldPersistTaps="always">
               {quickReplies.filter((r: string) => r.toLowerCase().includes(inputText.slice(1).toLowerCase())).map((reply: string, i: number) => (
                 <ScaleButton key={i} onPress={() => { setInputText(reply); Platform.OS !== 'web' && Haptics.selectionAsync(); }} style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#f8fafc', flexDirection: 'row', alignItems: 'center' }}>
-                  <View style={{ width: 32, height: 32, borderRadius: 16, overflow: 'hidden', justifyContent: 'center', alignItems: 'center', marginRight: 12 }}>
+                  <View style={{ width: 32, height: 32, borderRadius: 16, overflow: 'hidden', backgroundColor: '#fef3c7', justifyContent: 'center', alignItems: 'center', marginRight: 12 }}>
                     <LinearGradient colors={['#fef3c7', '#fde68a']} style={StyleSheet.absoluteFillObject} />
                     <Zap color="#d97706" size={16} />
                   </View>
@@ -756,7 +756,7 @@ export default function ChatThreadScreen() {
                 </ScaleButton>
               ))}
               {inputText.length > 1 && !quickReplies.includes(inputText.slice(1)) && (
-                <ScaleButton onPress={() => { addQuickReply(inputText.slice(1)); setInputText(inputText.slice(1)); Platform.OS !== 'web' && Haptics.notificationAsync(); }} style={{ padding: 16, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
+                <ScaleButton onPress={() => { addQuickReply(inputText.slice(1)); setInputText(inputText.slice(1)); Platform.OS !== 'web' && Haptics.notificationAsync(); }} style={{ padding: 16, flexDirection: 'row', alignItems: 'center', overflow: 'hidden', backgroundColor: '#eff6ff' }}>
                   <LinearGradient colors={['#eff6ff', '#e0e7ff']} style={StyleSheet.absoluteFillObject} />
                   <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#3b82f6', justifyContent: 'center', alignItems: 'center', marginRight: 12 }}>
                     <PlusCircle color="#fff" size={16} />
@@ -772,7 +772,7 @@ export default function ChatThreadScreen() {
             <Text fontWeight="800" color="#059669">Request (৳):</Text>
             <XStack space="$2" alignItems="center" flex={1} marginLeft="$3">
               <TextInput value={moneyAmount} onChangeText={setMoneyAmount} keyboardType="numeric" placeholder="0.00" style={{ flex: 1, backgroundColor: '#fff', padding: 8, paddingHorizontal: 12, borderRadius: 12, borderWidth: 1, borderColor: '#10b981', fontSize: 16, color: '#064e3b', fontWeight: 'bold' }} />
-              <ScaleButton onPress={sendMoneyRequest} style={{ overflow: 'hidden', borderRadius: 12 }}>
+              <ScaleButton onPress={sendMoneyRequest} style={{ overflow: 'hidden', borderRadius: 12, backgroundColor: '#10b981' }}>
                 <LinearGradient colors={['#10b981', '#059669']} style={StyleSheet.absoluteFillObject} />
                 <View style={{ padding: 10 }}>
                   <Send color="#fff" size={18} />
@@ -822,7 +822,7 @@ export default function ChatThreadScreen() {
               }
             }}
           >
-            <Animated.View style={{ padding: 12, borderRadius: 24, overflow: 'hidden', backgroundColor: (!inputText.trim() && !isRecording) ? '#e0e7ff' : 'transparent', transform: [{ scale: isRecording ? 1.3 : 1 }], shadowColor: inputText.trim() ? '#4f46e5' : isRecording ? '#ef4444' : 'transparent', shadowOpacity: 0.3, shadowRadius: 8, shadowOffset: { width: 0, height: 4 }, elevation: (inputText.trim() || isRecording) ? 5 : 0 }}>
+            <Animated.View style={{ padding: 12, borderRadius: 24, overflow: 'hidden', backgroundColor: (!inputText.trim() && !isRecording) ? '#e0e7ff' : inputText.trim() ? '#6366f1' : '#ef4444', transform: [{ scale: isRecording ? 1.3 : 1 }], shadowColor: inputText.trim() ? '#4f46e5' : isRecording ? '#ef4444' : 'transparent', shadowOpacity: 0.3, shadowRadius: 8, shadowOffset: { width: 0, height: 4 }, elevation: (inputText.trim() || isRecording) ? 5 : 0 }}>
               {inputText.trim() ? (
                 <>
                   <LinearGradient colors={['#818cf8', '#4f46e5']} style={StyleSheet.absoluteFillObject} />
