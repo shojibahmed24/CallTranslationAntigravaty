@@ -8,7 +8,7 @@ import { GradientBackground } from '../../src/components/ThemeComponents';
 import { LinearGradient } from 'expo-linear-gradient';
 import AnimatedEmoji from '../../src/components/AnimatedEmoji';
 import * as Haptics from 'expo-haptics';
-import Animated, { FadeInUp, FadeInDown, Layout } from 'react-native-reanimated';
+import Animated, { FadeInUp, FadeInDown, Layout, useSharedValue, useAnimatedStyle, withTiming, FadeOutDown } from 'react-native-reanimated';
 import { useChat } from '../../src/context/ChatContext';
 import { useAuth } from '../../src/context/AuthContext';
 import { useCall } from '../../src/context/CallContext';
